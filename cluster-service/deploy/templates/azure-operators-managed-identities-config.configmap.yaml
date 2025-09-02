@@ -79,8 +79,21 @@ data:
         {{- end }}
         optional: true
     dataPlaneOperatorsIdentities:
+      disk-csi-driver-legacy:
+        minOpenShiftVersion: 4.10
+        roleDefinitions:
+        {{- range .Values.azureOperatorsMI.diskCsiDriver.roleDefinitions }}
+          - resourceId: '/providers/Microsoft.Authorization/roleDefinitions/{{ .id }}'
+            name: '{{ .name }}'
+        {{- end }}
+        k8sServiceAccounts:
+          - name: 'azure-disk-csi-driver-operator'
+            namespace: 'openshift-cluster-csi-drivers'
+          - name: 'azure-disk-csi-driver-controller-sa'
+            namespace: 'openshift-cluster-csi-drivers'
+        optional: false
       disk-csi-driver:
-        minOpenShiftVersion: 4.19
+        minOpenShiftVersion: 4.16
         roleDefinitions:
         {{- range .Values.azureOperatorsMI.diskCsiDriver.roleDefinitions }}
           - resourceId: '/providers/Microsoft.Authorization/roleDefinitions/{{ .id }}'
@@ -103,8 +116,23 @@ data:
           - name: 'registry'
             namespace: 'openshift-image-registry'
         optional: false
+      file-csi-driver-legacy:
+        minOpenShiftVersion: 4.10
+        roleDefinitions:
+        {{- range .Values.azureOperatorsMI.fileCsiDriver.roleDefinitions }}
+          - resourceId: '/providers/Microsoft.Authorization/roleDefinitions/{{ .id }}'
+            name: '{{ .name }}'
+        {{- end }}
+        k8sServiceAccounts:
+          - name: 'azure-file-csi-driver-operator'
+            namespace: 'openshift-cluster-csi-drivers'
+          - name: 'azure-file-csi-driver-controller-sa'
+            namespace: 'openshift-cluster-csi-drivers'
+          - name: 'azure-file-csi-driver-node-sa'
+            namespace: 'openshift-cluster-csi-drivers'
+        optional: false
       file-csi-driver:
-        minOpenShiftVersion: 4.19
+        minOpenShiftVersion: 4.16
         roleDefinitions:
         {{- range .Values.azureOperatorsMI.fileCsiDriver.roleDefinitions }}
           - resourceId: '/providers/Microsoft.Authorization/roleDefinitions/{{ .id }}'
